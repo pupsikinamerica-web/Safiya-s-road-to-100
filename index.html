@@ -1,0 +1,1308 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Safiya's Road to 100</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Doto:wght@700;900&family=Martian+Mono:wght@400;600&family=Onest:wght@400;500;600;700&family=Tektur:wght@600;800&display=swap">
+<style>
+/* Layout: a test-session console. Sticky status bar (session clock, module chips, XP),
+   modules as screen panels with a header strip, every timer on a dark dot-matrix display. */
+:root{
+  --bg:#E8ECF2; --panel:#FBFCFE; --panel-2:#F0F3F8; --ink:#121829; --muted:#586278; --line:#CBD3DF;
+  --signal:#E0452A; --key:#2A52E0; --ok:#0A8F68; --warn:#B07800;
+  --on-accent:#FFFFFF;
+  --display:#0E1424; --display-ink:#FFB547; --display-ghost:rgba(255,181,71,.11); --display-soft:rgba(255,181,71,.62);
+  --dotgrid:rgba(18,24,41,.075);
+  --vf-ink:#FFFFFF;
+  --f-display:"Tektur","Onest",system-ui,sans-serif;
+  --f-body:"Onest",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-dot:"Doto","Martian Mono",ui-monospace,monospace;
+  --f-mono:"Martian Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B0F1A; --panel:#121929; --panel-2:#172036; --ink:#E8ECF5; --muted:#97A1B6; --line:#28324A;
+    --signal:#FF6A4D; --key:#7D97FF; --ok:#36D29B; --warn:#F2B53F;
+    --on-accent:#0B0F1A;
+    --display:#05080F; --display-ink:#FFB547; --display-ghost:rgba(255,181,71,.08); --display-soft:rgba(255,181,71,.6);
+    --dotgrid:rgba(232,236,245,.05);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B0F1A; --panel:#121929; --panel-2:#172036; --ink:#E8ECF5; --muted:#97A1B6; --line:#28324A;
+  --signal:#FF6A4D; --key:#7D97FF; --ok:#36D29B; --warn:#F2B53F;
+  --on-accent:#0B0F1A;
+  --display:#05080F; --display-ink:#FFB547; --display-ghost:rgba(255,181,71,.08); --display-soft:rgba(255,181,71,.6);
+  --dotgrid:rgba(232,236,245,.05);
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{
+  background-color:var(--bg);
+  background-image:radial-gradient(var(--dotgrid) 1.2px, transparent 1.5px);
+  background-size:18px 18px;
+  color:var(--ink); font-family:var(--f-body); font-size:16px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1120px; margin:0 auto; padding-inline:clamp(16px,4vw,32px); padding-block:0 56px}
+h1,h2,h3{font-family:var(--f-display); text-wrap:balance; margin:0; line-height:1.08}
+p{margin:0}
+.mono{font-family:var(--f-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase}
+.ru{color:var(--muted); font-size:.93rem; max-width:62ch}
+.lead{font-size:1.06rem; max-width:60ch}
+.row{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+.sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+
+/* buttons */
+button{font:inherit; color:inherit}
+.btn{
+  font:600 15px/1 var(--f-body); padding:12px 18px; border-radius:10px; cursor:pointer;
+  border:1px solid var(--line); background:var(--panel); color:var(--ink);
+  display:inline-flex; align-items:center; gap:8px; transition:transform .12s, border-color .15s, background .15s;
+}
+.btn:hover{border-color:var(--ink)}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--signal); border-color:var(--signal); color:var(--on-accent)}
+.btn.blue{background:var(--key); border-color:var(--key); color:var(--on-accent)}
+.btn.primary:hover,.btn.blue:hover{filter:brightness(1.06)}
+.btn[disabled]{opacity:.45; cursor:not-allowed}
+:focus-visible{outline:3px solid var(--key); outline-offset:2px}
+
+/* ---------- status bar ---------- */
+.bar{position:sticky; top:env(safe-area-inset-top,0px); z-index:30;
+  background:color-mix(in srgb, var(--panel) 90%, transparent);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-bottom:1px solid var(--line)}
+.bar-in{max-width:1120px; margin:0 auto; padding:9px clamp(16px,4vw,32px); display:flex; align-items:center; gap:12px 16px; flex-wrap:wrap}
+.brand{display:flex; align-items:center; gap:8px; color:var(--muted)}
+.brand b{font-family:var(--f-display); font-size:15px; letter-spacing:.02em; text-transform:none; color:var(--ink)}
+.chips{display:flex; gap:5px; flex-wrap:wrap; margin-right:auto}
+.chip{
+  height:28px; min-width:34px; padding:0 7px; border-radius:7px; cursor:pointer;
+  border:1px solid var(--line); background:var(--panel-2); color:var(--muted);
+  font-family:var(--f-mono); font-size:10.5px; letter-spacing:.04em;
+}
+.chip.is-current{border-color:var(--ink); color:var(--ink)}
+.chip.is-done{background:var(--ok); border-color:var(--ok); color:var(--on-accent)}
+.clock{display:flex; align-items:center; gap:8px; background:var(--display); border-radius:9px; padding:4px 6px 4px 10px}
+.clock .dig{font-size:20px}
+.clock-btn{width:26px; height:26px; border-radius:6px; border:0; cursor:pointer; background:rgba(255,181,71,.14); color:var(--display-ink); display:grid; place-items:center}
+.xp{display:flex; align-items:baseline; gap:6px}
+.xp b{font-family:var(--f-display); font-size:20px}
+.xp b.bump{animation:bump .45s ease}
+@keyframes bump{40%{transform:scale(1.35); color:var(--ok)}}
+.icon-btn{width:34px; height:34px; border-radius:9px; border:1px solid var(--line); background:var(--panel); cursor:pointer; display:grid; place-items:center}
+.icon-btn svg{width:18px; height:18px}
+.sess-line{height:3px; background:var(--line)}
+.sess-line i{display:block; height:100%; width:0; background:var(--signal); transition:width 1s linear}
+@media (max-width:560px){ .brand .mono{display:none} }
+
+/* ---------- dot-matrix display ---------- */
+.lcd{
+  background-color:var(--display); color:var(--display-ink); border-radius:16px; position:relative; overflow:hidden;
+  background-image:repeating-linear-gradient(0deg, rgba(255,255,255,.028) 0 1px, transparent 1px 3px);
+}
+.lcd-label{font-family:var(--f-mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--display-soft)}
+.dig{
+  font-family:var(--f-dot); font-weight:900; line-height:.92; font-variant-numeric:tabular-nums;
+  position:relative; display:inline-block; isolation:isolate; color:var(--display-ink);
+  text-shadow:0 0 16px rgba(255,181,71,.38);
+}
+.dig::before{content:attr(data-ghost); position:absolute; inset:0; color:var(--display-ghost); text-shadow:none; z-index:-1}
+
+/* ---------- hero ---------- */
+.hero{display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); gap:clamp(22px,4vw,52px); align-items:center; padding-block:clamp(28px,6vw,60px) 10px}
+@media (max-width:860px){ .hero{grid-template-columns:1fr} }
+.hero-text{display:grid; gap:18px; min-width:0}
+.eyebrow{color:var(--signal); display:flex; align-items:center; gap:10px}
+.eyebrow i{width:9px; height:9px; border-radius:50%; background:var(--signal); animation:blink 1.4s steps(1) infinite}
+@keyframes blink{50%{opacity:.15}}
+.hero h1{font-size:clamp(2.5rem,6.4vw,4.4rem); font-weight:800; letter-spacing:-.01em}
+.hero h1 em{font-style:normal; color:var(--signal)}
+.facts{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); border:1px solid var(--line); border-radius:12px; background:var(--panel); overflow:hidden}
+.facts div{padding:11px 13px; display:grid; gap:4px; min-width:0}
+.facts div + div{border-left:1px solid var(--line)}
+.facts dt{color:var(--muted)}
+.facts dd{margin:0; font-weight:600; font-size:.95rem; line-height:1.3}
+@media (max-width:620px){ .facts{grid-template-columns:repeat(2,minmax(0,1fr))} .facts div:nth-child(3){border-left:0} .facts div:nth-child(n+3){border-top:1px solid var(--line)} }
+
+.hero-lcd{padding:20px clamp(16px,3vw,26px) 18px; display:grid; gap:16px}
+.lcd-top{display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap}
+.score-row{display:flex; align-items:flex-end; justify-content:space-between; gap:10px}
+.score-row > div{display:grid; gap:6px}
+.dig.big{font-size:clamp(3rem,8vw,5.2rem)}
+.score-row svg{flex:1 1 40px; min-width:24px; max-width:110px; height:30px; margin-bottom:16px}
+.dig.goal{animation:goalglow 2.6s ease-in-out infinite}
+@keyframes goalglow{50%{text-shadow:0 0 30px rgba(255,181,71,.75)}}
+.gauge{position:relative; height:12px; border-radius:6px; background:var(--display-ghost); margin-top:26px}
+.gauge .gfill{position:absolute; left:0; top:0; bottom:0; width:33.33%; border-radius:6px; background:var(--display-ink)}
+.gauge .ggap{position:absolute; left:33.33%; width:26.67%; top:0; bottom:0;
+  background:repeating-linear-gradient(90deg, rgba(255,181,71,.55) 0 4px, transparent 4px 8px)}
+.gauge .gmark{position:absolute; left:60%; top:-24px; bottom:-6px; width:2px; background:var(--signal)}
+.gauge .gmark span{position:absolute; bottom:100%; left:50%; transform:translateX(-50%); white-space:nowrap; color:var(--signal); font-family:var(--f-mono); font-size:10px; letter-spacing:.12em}
+.gticks{position:relative; height:16px}
+.gticks span{position:absolute; top:0; transform:translateX(-50%); font-family:var(--f-mono); font-size:10px; color:var(--display-soft)}
+.gticks span:first-child{transform:none}
+.gticks span:last-child{transform:translateX(-100%)}
+
+/* ---------- module panels ---------- */
+.mod{margin-top:26px; background:var(--panel); border:1px solid var(--line); border-radius:var(--r); overflow:hidden; scroll-margin-top:96px}
+.mod-head{display:flex; align-items:center; gap:10px 14px; padding:11px 18px; border-bottom:1px solid var(--line); background:var(--panel-2); color:var(--muted); flex-wrap:wrap}
+.mod-head .no{font-family:var(--f-mono); font-size:11px; font-weight:600; color:var(--ink); border:1px solid var(--ink); border-radius:5px; padding:3px 6px}
+.mod-head .led{width:9px; height:9px; border-radius:50%; background:var(--line); margin-left:auto; transition:background .3s, box-shadow .3s}
+.mod[data-state="done"] .led{background:var(--ok); box-shadow:0 0 0 4px color-mix(in srgb, var(--ok) 22%, transparent)}
+.mod-body{padding:clamp(18px,3vw,30px); display:grid; gap:20px}
+.mod h2{font-size:clamp(1.55rem,3.3vw,2.2rem); font-weight:800}
+.intro{display:grid; gap:10px}
+.spec{display:flex; gap:7px; flex-wrap:wrap}
+.spec span{font-family:var(--f-mono); font-size:10.5px; letter-spacing:.05em; padding:5px 9px; border:1px dashed var(--line); border-radius:6px; color:var(--muted)}
+.spec span b{color:var(--ink); font-weight:600}
+.note{font-size:.95rem; color:var(--muted)}
+.note b{color:var(--ink)}
+
+/* M1 mixer */
+.mixer{display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); gap:18px; align-items:stretch}
+@media (max-width:760px){ .mixer{grid-template-columns:1fr} }
+.sliders{display:grid; gap:12px; align-content:start}
+.sl{display:grid; grid-template-columns:110px minmax(0,1fr) 46px; align-items:center; gap:12px; padding:10px 14px; border:1px solid var(--line); border-radius:11px; background:var(--panel-2)}
+.sl label{font-weight:600}
+.sl label small{display:block; font-family:var(--f-mono); font-size:9.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--signal); font-weight:400}
+.sl input{width:100%; accent-color:var(--key)}
+.sl.focus input{accent-color:var(--signal)}
+.sl output{font-family:var(--f-mono); font-weight:600; text-align:right; font-variant-numeric:tabular-nums}
+.mix-lcd{padding:18px 20px; display:grid; gap:10px; align-content:center}
+.mix-lcd .dig{font-size:clamp(4rem,9vw,5.6rem)}
+.mix-msg{font-family:var(--f-mono); font-size:12px; letter-spacing:.06em; color:var(--display-ink)}
+.mixbar{height:8px; border-radius:4px; background:var(--display-ghost); position:relative}
+.mixbar i{position:absolute; inset:0 auto 0 0; width:33%; background:var(--display-ink); border-radius:4px; transition:width .35s}
+.mixbar b{position:absolute; left:60%; top:-5px; bottom:-5px; width:2px; background:var(--signal)}
+
+/* viewfinder */
+.vf{position:relative; border-radius:12px; overflow:hidden; background:var(--display); aspect-ratio:800/520; max-width:100%}
+.vf svg.scene{display:block; width:100%; height:100%}
+.corner{position:absolute; width:24px; height:24px; border:3px solid var(--vf-ink); opacity:.92; pointer-events:none}
+.corner.tl{top:12px; left:12px; border-right:0; border-bottom:0}
+.corner.tr{top:12px; right:12px; border-left:0; border-bottom:0}
+.corner.bl{bottom:12px; left:12px; border-right:0; border-top:0}
+.corner.br{bottom:12px; right:12px; border-left:0; border-top:0}
+.vf-badge{position:absolute; top:14px; left:46px; display:flex; align-items:center; gap:7px; padding:5px 9px; border-radius:6px; background:rgba(5,8,15,.62); color:var(--vf-ink); font-family:var(--f-mono); font-size:10.5px; letter-spacing:.14em}
+.vf-badge i{width:8px; height:8px; border-radius:50%; background:#9AA3B5}
+.vf.is-rec .vf-badge i{background:#FF4A2E; animation:blink 1s steps(1) infinite}
+.vf-time{position:absolute; top:12px; right:46px; padding:5px 10px; border-radius:7px; background:rgba(5,8,15,.72)}
+.vf-time .dig{font-size:24px}
+.wave{position:absolute; left:50%; bottom:14px; transform:translateX(-50%); display:flex; align-items:center; gap:3px; height:34px; padding:0 12px; border-radius:8px; background:rgba(5,8,15,.55); opacity:0; transition:opacity .25s}
+.vf.is-rec .wave{opacity:1}
+.wave span{width:3px; height:100%; border-radius:2px; background:#FF8A6E; transform:scaleY(.2)}
+.vf.is-rec .wave span{animation:wave var(--d,.9s) ease-in-out infinite}
+@keyframes wave{0%,100%{transform:scaleY(.18)} 50%{transform:scaleY(1)}}
+
+/* M2 speak */
+.speak{display:grid; grid-template-columns:minmax(0,1.08fr) minmax(0,1fr); gap:22px; align-items:start}
+@media (max-width:900px){ .speak{grid-template-columns:1fr} }
+.vf-col{display:grid; gap:12px; min-width:0}
+.track{position:relative; height:10px; border-radius:5px; background:var(--panel-2); border:1px solid var(--line); margin-top:4px}
+.track i{position:absolute; inset:0 auto 0 0; width:0; background:var(--signal); border-radius:5px; transition:width .9s linear}
+.track .mk{position:absolute; top:-3px; bottom:-3px; width:2px; background:var(--muted)}
+.track .mk span{position:absolute; top:calc(100% + 4px); left:50%; transform:translateX(-50%); font-family:var(--f-mono); font-size:9.5px; color:var(--muted); white-space:nowrap}
+.track-gap{height:14px}
+.phase{color:var(--muted)}
+.phase.on{color:var(--signal)}
+.result{font-size:.95rem; padding:10px 14px; border-radius:10px; background:var(--panel-2); border:1px solid var(--line)}
+.frames{display:grid; gap:10px}
+.frame{
+  --c:var(--key);
+  text-align:left; cursor:pointer; padding:14px 16px; border-radius:12px; border:1px solid var(--line); background:var(--panel);
+  display:grid; grid-template-columns:34px minmax(0,1fr) 26px; gap:4px 12px; align-items:start; transition:border-color .2s, background .2s;
+}
+.frame[data-n="2"]{--c:var(--ok)} .frame[data-n="3"]{--c:var(--warn)} .frame[data-n="4"]{--c:var(--signal)}
+.frame:hover{border-color:var(--c)}
+.frame .n{grid-row:span 3; width:34px; height:34px; border-radius:8px; display:grid; place-items:center; background:var(--c); color:var(--on-accent); font-family:var(--f-mono); font-weight:600}
+.frame .t{font-family:var(--f-display); font-weight:800; font-size:1.05rem; letter-spacing:.02em}
+.frame .g{grid-column:2; color:var(--muted); font-size:.86rem}
+.frame .ph{grid-column:2; display:flex; flex-wrap:wrap; gap:6px; margin-top:6px}
+.frame .ph span{font-size:.88rem; padding:4px 9px; border-radius:7px; background:var(--panel-2); border:1px solid var(--line)}
+.frame .tick{grid-column:3; grid-row:1; width:24px; height:24px; border-radius:50%; border:2px solid var(--line); display:grid; place-items:center; color:transparent; font-size:13px}
+.frame[aria-pressed="true"]{border-color:var(--c); background:color-mix(in srgb, var(--c) 9%, var(--panel))}
+.frame[aria-pressed="true"] .tick{background:var(--c); border-color:var(--c); color:var(--on-accent)}
+details.model{border:1px solid var(--line); border-radius:12px; background:var(--panel-2)}
+details.model summary{cursor:pointer; padding:12px 16px; font-weight:600; list-style:none; display:flex; align-items:center; gap:10px}
+details.model summary::-webkit-details-marker{display:none}
+details.model summary::before{content:"+"; font-family:var(--f-mono); width:22px; height:22px; border-radius:6px; display:grid; place-items:center; border:1px solid var(--line)}
+details.model[open] summary::before{content:"−"}
+details.model .in{padding:0 16px 16px; display:grid; gap:10px; max-width:75ch}
+.hl{text-decoration:underline; text-decoration-thickness:3px; text-underline-offset:4px; text-decoration-skip-ink:none}
+.hl sup{font-family:var(--f-mono); font-size:9px; margin-left:2px; padding:1px 4px; border-radius:4px; color:var(--on-accent); text-decoration:none; display:inline-block}
+.hl-1{text-decoration-color:var(--key)} .hl-1 sup{background:var(--key)}
+.hl-2{text-decoration-color:var(--ok)} .hl-2 sup{background:var(--ok)}
+.hl-3{text-decoration-color:var(--warn)} .hl-3 sup{background:var(--warn)}
+.hl-4{text-decoration-color:var(--signal)} .hl-4 sup{background:var(--signal)}
+
+/* M3 match */
+.match{position:relative; display:grid; grid-template-columns:minmax(0,1fr) minmax(36px,1.1fr) minmax(0,1fr); align-items:start}
+.threads{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible; z-index:1}
+.threads path{fill:none; stroke:var(--key); stroke-width:2.6; stroke-dasharray:7 6; stroke-linecap:round}
+.threads path.locked{stroke:var(--ok); stroke-dasharray:2 7; stroke-width:3.2}
+.m-col{display:grid; gap:11px; position:relative; z-index:2; min-width:0}
+.m-item{
+  position:relative; text-align:left; cursor:pointer; padding:13px 15px; border-radius:11px;
+  border:1px solid var(--line); background:var(--panel-2); font-size:.98rem; line-height:1.3; min-height:58px;
+  transition:border-color .15s, background .2s;
+}
+.m-left .m-item{font-weight:600}
+.m-right .m-item small{display:block; color:var(--muted); font-size:.8rem; margin-top:3px}
+.m-item::after{content:""; position:absolute; top:50%; width:12px; height:12px; margin-top:-6px; border-radius:50%; border:2px solid var(--line); background:var(--panel)}
+.m-left .m-item::after{right:-7px}
+.m-right .m-item::after{left:-7px}
+.m-item:hover{border-color:var(--key)}
+.m-item.is-active{border-color:var(--key); box-shadow:0 0 0 3px color-mix(in srgb, var(--key) 22%, transparent)}
+.m-item.is-active::after{border-color:var(--key); background:var(--key)}
+.m-item.is-done{border-color:var(--ok); background:color-mix(in srgb, var(--ok) 10%, var(--panel)); cursor:default}
+.m-item.is-done::after{border-color:var(--ok); background:var(--ok)}
+.m-item.is-wrong{border-color:var(--signal); animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-5px)} 40%,80%{transform:translateX(5px)}}
+.m-status{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+.pips{display:flex; gap:5px}
+.pips i{width:20px; height:6px; border-radius:3px; background:var(--line)}
+.pips i.on{background:var(--ok)}
+
+/* M4 write */
+.write{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); gap:22px; align-items:start}
+@media (max-width:900px){ .write{grid-template-columns:1fr} }
+.w-col{display:grid; gap:14px; min-width:0}
+.formula{display:flex; flex-wrap:wrap; align-items:center; gap:6px}
+.key{font-family:var(--f-mono); font-size:11.5px; font-weight:600; letter-spacing:.04em; padding:8px 10px; border-radius:8px; background:var(--panel); border:1px solid var(--line); border-bottom-width:4px}
+.key small{display:block; font-weight:400; font-size:10px; color:var(--muted); letter-spacing:.02em; margin-top:2px; text-transform:none}
+.formula .arr{color:var(--muted); font-family:var(--f-mono)}
+.example{font-size:.95rem; padding:10px 14px; border-radius:10px; border:1px dashed var(--line)}
+.example b{font-weight:600}
+.w-top{display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+.lcd-mini{padding:7px 12px; border-radius:9px}
+.lcd-mini .dig{font-size:30px}
+.w-stats{font-family:var(--f-mono); font-size:12px; color:var(--muted); display:flex; gap:14px; flex-wrap:wrap}
+.w-stats b{font-size:16px; color:var(--ink)}
+textarea{
+  width:100%; resize:vertical; min-height:130px; padding:14px 16px; border-radius:12px;
+  border:1px solid var(--line); background:var(--panel); color:var(--ink); font:500 1.05rem/1.6 var(--f-body);
+}
+textarea:read-only{background:var(--panel-2)}
+.checks{list-style:none; margin:0; padding:0; display:grid; gap:7px}
+.checks li{display:flex; gap:10px; align-items:center; font-size:.95rem; padding:8px 12px; border-radius:9px; border:1px solid var(--line)}
+.checks li i{width:22px; height:22px; flex:none; border-radius:6px; display:grid; place-items:center; font-style:normal; font-family:var(--f-mono); font-size:12px; color:var(--on-accent)}
+.checks li.pass i{background:var(--ok)}
+.checks li.fail i{background:var(--signal)}
+
+/* M5 interactive writing */
+.iw{display:grid; gap:16px}
+.prompt-card{padding:18px 20px; border-radius:12px; display:grid; gap:8px}
+.prompt-card p{font-family:var(--f-display); font-weight:600; font-size:clamp(1.15rem,2.6vw,1.45rem); color:var(--display-ink); line-height:1.3}
+.tpl{font-size:1.1rem; line-height:2.25; padding:18px 20px; border-radius:12px; border:1px solid var(--line); background:var(--panel-2); max-width:none}
+.tpl .fx{color:var(--muted)}
+.tpl select{font:600 1rem var(--f-body); color:var(--key); background:var(--panel); border:1px solid var(--key); border-radius:7px; padding:3px 6px; cursor:pointer}
+.blank{
+  display:inline; padding:3px 8px; border-radius:6px; background:var(--panel); color:var(--ink); font-weight:500;
+  border-bottom:2px solid var(--key); outline:none; -webkit-box-decoration-break:clone; box-decoration-break:clone;
+}
+.blank:empty::before{content:attr(data-ph); color:var(--muted); font-style:italic; font-weight:400; opacity:.75}
+.blank:focus{background:color-mix(in srgb, var(--key) 10%, var(--panel))}
+.wc{display:grid; gap:8px}
+.wc-bar{position:relative; height:12px; border-radius:6px; background:var(--panel-2); border:1px solid var(--line)}
+.wc-bar i{position:absolute; inset:0 auto 0 0; width:0; border-radius:6px; background:var(--key); transition:width .3s, background .3s}
+.wc-bar.ok i{background:var(--ok)}
+.wc-bar b{position:absolute; left:62.5%; top:-5px; bottom:-5px; width:2px; background:var(--ink)}
+.wc-bar b span{position:absolute; bottom:calc(100% + 2px); left:50%; transform:translateX(-50%); font-family:var(--f-mono); font-size:9.5px; white-space:nowrap}
+.wc-top{display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; font-size:.95rem}
+.swaps{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:8px}
+.swap{display:flex; align-items:center; gap:8px; padding:9px 12px; border:1px solid var(--line); border-radius:10px; font-size:.93rem; background:var(--panel)}
+.swap s{color:var(--muted); text-decoration-color:var(--signal); text-decoration-thickness:2px}
+.swap span{font-family:var(--f-mono); color:var(--muted)}
+.swap b{font-weight:600}
+.follow{padding:12px 16px; border-radius:10px; border:1px dashed var(--line); font-size:.95rem}
+
+/* M6 interactive speaking */
+.is{display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); gap:20px; align-items:start}
+@media (max-width:860px){ .is{grid-template-columns:1fr} }
+.is-card{padding:22px; display:grid; gap:18px}
+.is-q{font-family:var(--f-display); font-weight:600; font-size:clamp(1.2rem,2.8vw,1.55rem); color:var(--display-ink); line-height:1.3; min-height:3.9em}
+.is-mid{display:flex; align-items:center; gap:20px; flex-wrap:wrap}
+.ring{position:relative; width:118px; height:118px; flex:none}
+.ring svg{width:100%; height:100%; transform:rotate(-90deg)}
+.ring circle{fill:none; stroke-width:7}
+.ring .bgc{stroke:var(--display-ghost)}
+.ring .fgc{stroke:var(--display-ink); stroke-linecap:round; transition:stroke-dashoffset 1s linear}
+.ring .dig{position:absolute; inset:0; display:grid; place-items:center; font-size:38px}
+.ring .dig::before{display:grid; place-items:center}
+.is-dots{display:flex; gap:6px}
+.is-dots i{width:26px; height:6px; border-radius:3px; background:var(--display-ghost)}
+.is-dots i.on{background:var(--display-ink)}
+.is-dots i.cur{outline:1px solid var(--display-soft); outline-offset:2px}
+.is-card .btn{border-color:rgba(255,181,71,.35); background:transparent; color:var(--display-ink)}
+.is-card .btn.primary{background:var(--display-ink); border-color:var(--display-ink); color:var(--display)}
+.buyers{display:grid; gap:10px}
+.buyers h3{font-size:1.15rem}
+.buyers ul{list-style:none; margin:0; padding:0; display:grid; gap:7px}
+.buyers li{padding:10px 13px; border-radius:10px; background:var(--panel-2); border:1px solid var(--line); font-size:.97rem}
+.rule{padding:12px 14px; border-radius:10px; border:1px solid var(--signal); color:var(--ink); display:grid; gap:4px}
+.rule b{color:var(--signal); font-family:var(--f-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase}
+
+/* finale */
+.fin-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.2fr); gap:22px; align-items:start}
+@media (max-width:860px){ .fin-grid{grid-template-columns:1fr} }
+.report{padding:20px 22px; display:grid; gap:14px}
+.report .dig{font-size:64px}
+.rep-list{list-style:none; margin:0; padding:0; display:grid; gap:6px}
+.rep-list li{display:flex; justify-content:space-between; gap:10px; font-family:var(--f-mono); font-size:11.5px; letter-spacing:.05em; color:var(--display-soft); padding-bottom:6px; border-bottom:1px dashed rgba(255,181,71,.18)}
+.rep-list li b{font-weight:600}
+.rep-list li.is-done{color:var(--display-ink)}
+.rep-list li.is-done b::after{content:" ✓"}
+.plan{list-style:none; margin:0; padding:0; display:grid; gap:10px; counter-reset:w}
+.plan li{display:grid; grid-template-columns:auto minmax(0,1fr); gap:4px 14px; padding:14px 16px; border:1px solid var(--line); border-radius:12px; background:var(--panel-2)}
+.plan li .wk{grid-row:span 2; font-family:var(--f-mono); font-size:10.5px; letter-spacing:.06em; color:var(--signal); padding-top:3px; white-space:nowrap}
+.plan li b{font-family:var(--f-display); font-size:1.05rem}
+.plan li span{color:var(--muted); font-size:.94rem}
+.fin-msg{font-family:var(--f-display); font-size:1.25rem; color:var(--ok)}
+footer{margin-top:34px; padding-top:18px; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; color:var(--muted)}
+footer b{color:var(--ink)}
+
+#confetti{position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:60}
+
+/* scene animations */
+.rain{animation:rain 1.1s linear infinite}
+@keyframes rain{from{transform:translateY(-22px)} to{transform:translateY(0)}}
+.steam{animation:steam 2.6s ease-in-out infinite}
+.steam.s2{animation-delay:1.1s}
+@keyframes steam{0%{opacity:0; transform:translateY(6px)} 40%{opacity:.9} 100%{opacity:0; transform:translateY(-10px)}}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important; transition:none!important}
+  .vf.is-rec .wave span{transform:scaleY(.6)}
+}
+</style>
+
+<!-- ============ STATUS BAR ============ -->
+<div class="bar">
+  <div class="bar-in">
+    <div class="brand"><b>Road to 100</b><span class="mono">DET · trial</span></div>
+    <nav class="chips" aria-label="Lesson modules">
+      <button class="chip" data-go="m1" aria-label="Module 1, score">M1</button>
+      <button class="chip" data-go="m2" aria-label="Module 2, speak about the photo">M2</button>
+      <button class="chip" data-go="m3" aria-label="Module 3, phrase match">M3</button>
+      <button class="chip" data-go="m4" aria-label="Module 4, write about the photo">M4</button>
+      <button class="chip" data-go="m5" aria-label="Module 5, interactive writing">M5</button>
+      <button class="chip" data-go="m6" aria-label="Module 6, interactive speaking">M6</button>
+      <button class="chip" data-go="fin" aria-label="Session report">END</button>
+    </nav>
+    <div class="clock" title="Session time">
+      <span class="dig" id="sess" data-ghost="88:88">00:00</span>
+      <button class="clock-btn" id="sess-btn" aria-label="Start session clock">
+        <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path id="sess-ico" d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>
+      </button>
+    </div>
+    <div class="xp"><span class="mono">XP</span><b id="xp">0</b></div>
+    <button class="icon-btn" id="mute" aria-pressed="false" aria-label="Sound on. Click to mute">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/>
+        <path id="snd-on" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/>
+        <path id="snd-off" d="M16 9l6 6M22 9l-6 6" style="display:none"/>
+      </svg>
+    </button>
+  </div>
+  <div class="sess-line" aria-hidden="true"><i id="sess-line"></i></div>
+</div>
+
+<main class="wrap">
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="hero-text">
+    <p class="eyebrow mono"><i aria-hidden="true"></i>Duolingo English Test · trial session · 20 min</p>
+    <h1>Safiya's road to <em>100</em></h1>
+    <p class="lead">Your reading tasks are already fine. Today we work on the two parts that hold your score down: <b>Speaking</b> and <b>Writing</b>. You get ready-made frames, so you don't have to invent everything while the timer runs.</p>
+    <p class="ru">Сегодня разбираем устную и письменную части: готовые схемы ответа, чтобы не теряться под таймером.</p>
+    <dl class="facts">
+      <div><dt class="mono">Test day</dt><dd>End of October</dd></div>
+      <div><dt class="mono">Attempts</dt><dd>2 in the package</dd></div>
+      <div><dt class="mono">Strong</dt><dd>Reading tasks</dd></div>
+      <div><dt class="mono">To fix</dt><dd>Speaking, writing, speed</dd></div>
+    </dl>
+    <div class="row"><button class="btn primary" id="start">Start the session</button><span class="note">20 minutes · 6 short modules</span></div>
+  </div>
+
+  <div class="lcd hero-lcd" aria-label="Practice score 60, goal 100, on a scale from 10 to 160">
+    <div class="lcd-top"><span class="lcd-label">first practice test</span><span class="lcd-label">scale 10 · 160</span></div>
+    <div class="score-row">
+      <div><span class="lcd-label">now</span><span class="dig big" data-ghost="888">060</span></div>
+      <svg viewBox="0 0 120 30" aria-hidden="true"><path d="M2 15h104" stroke="var(--display-ink)" stroke-width="3" stroke-dasharray="3 6" stroke-linecap="round"/><path d="M100 6l12 9-12 9" fill="none" stroke="var(--display-ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div><span class="lcd-label">goal</span><span class="dig big goal" data-ghost="888">100</span></div>
+    </div>
+    <div class="gauge"><span class="gfill"></span><span class="ggap"></span><span class="gmark"><span>+40</span></span></div>
+    <div class="gticks"><span style="left:0">10</span><span style="left:33.33%">60</span><span style="left:60%">100</span><span style="left:100%">160</span></div>
+  </div>
+</header>
+
+<!-- ============ M1 SCORE MIXER ============ -->
+<section class="mod" id="m1" data-mod="1">
+  <div class="mod-head"><span class="no">M1</span><span class="mono">Where your points come from</span><span class="mono">2 min</span><span class="led" aria-hidden="true"></span></div>
+  <div class="mod-body">
+    <div class="intro">
+      <h2>One score, four parts</h2>
+      <p class="lead">Your overall score is the average of four subscores: Reading, Listening, Writing and Speaking. Move the sliders and watch the total change.</p>
+      <p class="ru">Общий балл считается как среднее из четырёх частей. Устная и письменная дают половину результата.</p>
+    </div>
+    <div class="mixer">
+      <div class="sliders">
+        <div class="sl"><label for="s-r">Reading</label><input type="range" id="s-r" min="10" max="160" step="5" value="75"><output for="s-r">75</output></div>
+        <div class="sl"><label for="s-l">Listening</label><input type="range" id="s-l" min="10" max="160" step="5" value="60"><output for="s-l">60</output></div>
+        <div class="sl focus"><label for="s-w">Writing<small>today's focus</small></label><input type="range" id="s-w" min="10" max="160" step="5" value="50"><output for="s-w">50</output></div>
+        <div class="sl focus"><label for="s-s">Speaking<small>today's focus</small></label><input type="range" id="s-s" min="10" max="160" step="5" value="55"><output for="s-s">55</output></div>
+        <p class="note">These are <b>example numbers</b>, not your real report. Put in your own subscores if you have them.</p>
+      </div>
+      <div class="lcd mix-lcd">
+        <span class="lcd-label">overall score</span>
+        <span class="dig" id="mix-total" data-ghost="888">060</span>
+        <div class="mixbar" aria-hidden="true"><i id="mix-fill"></i><b></b></div>
+        <p class="mix-msg" id="mix-msg">Need +40 to reach 100</p>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn blue" id="mix-try">Try: Writing +40 and Speaking +40</button>
+      <button class="btn" id="mix-reset">Back to the example</button>
+      <button class="btn" id="mix-ok">Got it</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ M2 SPEAK ABOUT THE PHOTO ============ -->
+<section class="mod" id="m2" data-mod="2">
+  <div class="mod-head"><span class="no">M2</span><span class="mono">Speak about the photo</span><span class="mono">5 min</span><span class="led" aria-hidden="true"></span></div>
+  <div class="mod-body">
+    <div class="intro">
+      <h2>The 4-box frame</h2>
+      <div class="spec"><span>look <b>0:20</b></span><span>speak <b>up to 1:30</b></span><span>no second try</span></div>
+      <p class="lead">Don't try to describe everything. Go through the same 4 boxes every time. If you freeze, jump to the next box.</p>
+      <p class="ru">Всегда одни и те же 4 шага. Застряли? Сразу переходите к следующему.</p>
+    </div>
+
+    <div class="speak">
+      <div class="vf-col">
+        <div class="vf" id="vf">
+          <svg class="scene" viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A street market on a sunny day: a fruit stall with a red and white awning, a seller giving a paper bag to a woman with a basket, a bicycle with flowers on the right, old buildings and a tree in the background">
+            <rect width="800" height="520" fill="#BCE0EE"/>
+            <circle cx="690" cy="78" r="58" fill="#FFD45E" opacity=".25"/>
+            <circle cx="690" cy="78" r="40" fill="#FFD45E"/>
+            <g fill="#FFFFFF" opacity=".9"><ellipse cx="150" cy="72" rx="62" ry="17"/><ellipse cx="182" cy="60" rx="34" ry="19"/><ellipse cx="128" cy="64" rx="26" ry="14"/><ellipse cx="520" cy="58" rx="48" ry="13"/><ellipse cx="540" cy="49" rx="24" ry="12"/></g>
+            <rect x="0" y="150" width="152" height="205" fill="#E6B38D"/>
+            <g fill="#F8E2CD"><rect x="18" y="172" width="24" height="30" rx="2"/><rect x="62" y="172" width="24" height="30" rx="2"/><rect x="106" y="172" width="24" height="30" rx="2"/><rect x="18" y="222" width="24" height="30" rx="2"/><rect x="62" y="222" width="24" height="30" rx="2"/><rect x="106" y="222" width="24" height="30" rx="2"/></g>
+            <polygon points="146,112 206,78 266,112" fill="#B4614B"/>
+            <rect x="152" y="112" width="108" height="243" fill="#D6866A"/>
+            <g fill="#F4CDBA"><rect x="170" y="132" width="26" height="36" rx="13"/><rect x="216" y="132" width="26" height="36" rx="13"/></g>
+            <rect x="552" y="130" width="256" height="12" fill="#A9BCD0"/>
+            <rect x="560" y="140" width="240" height="215" fill="#C5D4E3"/>
+            <g fill="#EDF3F9"><rect x="580" y="162" width="32" height="36" rx="2"/><rect x="634" y="162" width="32" height="36" rx="2"/><rect x="688" y="162" width="32" height="36" rx="2"/><rect x="742" y="162" width="32" height="36" rx="2"/><rect x="580" y="216" width="32" height="36" rx="2"/><rect x="634" y="216" width="32" height="36" rx="2"/><rect x="688" y="216" width="32" height="36" rx="2"/><rect x="742" y="216" width="32" height="36" rx="2"/><rect x="580" y="270" width="32" height="36" rx="2"/><rect x="742" y="270" width="32" height="36" rx="2"/></g>
+            <rect x="660" y="282" width="58" height="73" fill="#7E93A8"/>
+            <rect x="502" y="250" width="12" height="105" fill="#7A5638"/>
+            <circle cx="476" cy="258" r="28" fill="#4EA161"/><circle cx="542" cy="256" r="30" fill="#4EA161"/><circle cx="508" cy="230" r="46" fill="#5DB36E"/>
+            <rect y="352" width="800" height="168" fill="#E8DCC6"/>
+            <g stroke="#D6C6AA" stroke-width="2"><line x1="0" y1="404" x2="800" y2="404"/><line x1="0" y1="466" x2="800" y2="466"/><line x1="90" y1="352" x2="-30" y2="520"/><line x1="250" y1="352" x2="190" y2="520"/><line x1="410" y1="352" x2="410" y2="520"/><line x1="570" y1="352" x2="630" y2="520"/><line x1="730" y1="352" x2="850" y2="520"/></g>
+            <rect x="50" y="150" width="9" height="262" fill="#5B4636"/>
+            <rect x="381" y="150" width="9" height="262" fill="#5B4636"/>
+            <!-- seller -->
+            <rect x="268" y="256" width="64" height="80" rx="22" fill="#3F7BB0"/>
+            <path d="M284 266h32v70h-32z" fill="#F2EEE6"/>
+            <circle cx="300" cy="236" r="21" fill="#B97852"/>
+            <path d="M279 232Q281 212 300 211Q320 212 321 232Q312 220 300 221Q288 220 279 232Z" fill="#2D2624"/>
+            <path d="M324 274Q356 286 390 294" stroke="#3F7BB0" stroke-width="14" stroke-linecap="round" fill="none"/>
+            <path d="M384 300h28l2 34h-32z" fill="#CFA77A"/><path d="M384 306h28" stroke="#B98E61" stroke-width="2"/>
+            <circle cx="394" cy="296" r="7.5" fill="#B97852"/>
+            <!-- awning -->
+            <rect x="34" y="128" width="372" height="10" rx="3" fill="#B53E2A"/>
+            <g>
+              <rect x="40" y="138" width="45" height="52" fill="#E5553B"/><rect x="85" y="138" width="45" height="52" fill="#FFF3E3"/><rect x="130" y="138" width="45" height="52" fill="#E5553B"/><rect x="175" y="138" width="45" height="52" fill="#FFF3E3"/><rect x="220" y="138" width="45" height="52" fill="#E5553B"/><rect x="265" y="138" width="45" height="52" fill="#FFF3E3"/><rect x="310" y="138" width="45" height="52" fill="#E5553B"/><rect x="355" y="138" width="45" height="52" fill="#FFF3E3"/>
+              <circle cx="62.5" cy="190" r="22.5" fill="#E5553B"/><circle cx="107.5" cy="190" r="22.5" fill="#FFF3E3"/><circle cx="152.5" cy="190" r="22.5" fill="#E5553B"/><circle cx="197.5" cy="190" r="22.5" fill="#FFF3E3"/><circle cx="242.5" cy="190" r="22.5" fill="#E5553B"/><circle cx="287.5" cy="190" r="22.5" fill="#FFF3E3"/><circle cx="332.5" cy="190" r="22.5" fill="#E5553B"/><circle cx="377.5" cy="190" r="22.5" fill="#FFF3E3"/>
+            </g>
+            <!-- table and crates -->
+            <rect x="40" y="316" width="360" height="16" rx="3" fill="#7C4F33"/>
+            <rect x="50" y="332" width="340" height="80" fill="#A06A45"/>
+            <g stroke="#8A5A3A" stroke-width="3"><line x1="50" y1="358" x2="390" y2="358"/><line x1="50" y1="385" x2="390" y2="385"/></g>
+            <g fill="#FF9A2E"><circle cx="80" cy="276" r="11"/><circle cx="101" cy="276" r="11"/><circle cx="122" cy="276" r="11"/><circle cx="90" cy="262" r="11"/><circle cx="111" cy="262" r="11"/></g>
+            <g fill="#D9423A"><circle cx="170" cy="276" r="11"/><circle cx="191" cy="276" r="11"/><circle cx="212" cy="276" r="11"/><circle cx="180" cy="262" r="11"/><circle cx="201" cy="262" r="11"/></g>
+            <g fill="#9CCB4B"><circle cx="260" cy="276" r="11"/><circle cx="281" cy="276" r="11"/><circle cx="302" cy="276" r="11"/><circle cx="270" cy="262" r="11"/><circle cx="291" cy="262" r="11"/></g>
+            <g fill="#FFFFFF" opacity=".45"><circle cx="86" cy="258" r="3"/><circle cx="176" cy="258" r="3"/><circle cx="266" cy="258" r="3"/><circle cx="118" cy="272" r="3"/><circle cx="208" cy="272" r="3"/></g>
+            <g fill="#C98B4F"><rect x="62" y="280" width="78" height="36" rx="3"/><rect x="152" y="280" width="78" height="36" rx="3"/><rect x="242" y="280" width="78" height="36" rx="3"/></g>
+            <g stroke="#B07640" stroke-width="2.5"><line x1="62" y1="298" x2="140" y2="298"/><line x1="152" y1="298" x2="230" y2="298"/><line x1="242" y1="298" x2="320" y2="298"/></g>
+            <!-- customer -->
+            <ellipse cx="468" cy="449" rx="44" ry="7" fill="#000000" opacity=".08"/>
+            <path d="M444 238Q446 210 468 208Q492 210 494 240L497 298L439 298Z" fill="#3B2A22"/>
+            <rect x="461" y="258" width="14" height="16" fill="#E2B08A"/>
+            <circle cx="468" cy="240" r="21" fill="#E2B08A"/>
+            <path d="M447 238Q450 214 470 214Q488 216 490 232Q474 226 460 232Q452 236 447 238Z" fill="#3B2A22"/>
+            <path d="M446 272Q468 264 490 272L508 396Q468 406 428 396Z" fill="#7A5BA8"/>
+            <rect x="440" y="316" width="56" height="6" fill="#5E4387"/>
+            <rect x="452" y="398" width="10" height="44" rx="4" fill="#E2B08A"/><rect x="474" y="398" width="10" height="44" rx="4" fill="#E2B08A"/>
+            <ellipse cx="455" cy="444" rx="10" ry="5" fill="#2D2D3A"/><ellipse cx="481" cy="444" rx="10" ry="5" fill="#2D2D3A"/>
+            <path d="M450 282Q434 296 420 300" stroke="#7A5BA8" stroke-width="13" stroke-linecap="round" fill="none"/>
+            <circle cx="414" cy="301" r="7" fill="#E2B08A"/>
+            <path d="M488 282Q500 304 502 324" stroke="#7A5BA8" stroke-width="13" stroke-linecap="round" fill="none"/>
+            <ellipse cx="496" cy="340" rx="13" ry="6" fill="#E9B45E"/>
+            <path d="M480 340h44l-6 30h-32z" fill="#C68B4C"/>
+            <g stroke="#A86F37" stroke-width="2"><line x1="483" y1="350" x2="521" y2="350"/><line x1="485" y1="360" x2="519" y2="360"/></g>
+            <path d="M486 342Q502 316 518 342" stroke="#A86F37" stroke-width="4" fill="none"/>
+            <circle cx="502" cy="329" r="7" fill="#E2B08A"/>
+            <!-- bicycle -->
+            <ellipse cx="668" cy="496" rx="110" ry="8" fill="#000000" opacity=".07"/>
+            <g stroke="#90A4AE" stroke-width="1.5"><line x1="600" y1="412" x2="600" y2="492"/><line x1="560" y1="452" x2="640" y2="452"/><line x1="572" y1="424" x2="628" y2="480"/><line x1="628" y1="424" x2="572" y2="480"/><line x1="736" y1="412" x2="736" y2="492"/><line x1="696" y1="452" x2="776" y2="452"/><line x1="708" y1="424" x2="764" y2="480"/><line x1="764" y1="424" x2="708" y2="480"/></g>
+            <circle cx="600" cy="452" r="42" fill="none" stroke="#263238" stroke-width="6"/>
+            <circle cx="736" cy="452" r="42" fill="none" stroke="#263238" stroke-width="6"/>
+            <path d="M600 452L652 398L716 398L736 452M652 398L668 452L600 452M668 452L716 398" stroke="#2F8F83" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+            <path d="M652 398L646 381" stroke="#263238" stroke-width="6" stroke-linecap="round"/>
+            <path d="M630 378h30" stroke="#263238" stroke-width="8" stroke-linecap="round"/>
+            <path d="M716 398L708 370M694 368Q708 362 722 368" stroke="#263238" stroke-width="6" stroke-linecap="round" fill="none"/>
+            <circle cx="668" cy="452" r="8" fill="#263238"/>
+            <g stroke="#4EA161" stroke-width="3"><line x1="726" y1="368" x2="724" y2="352"/><line x1="740" y1="368" x2="740" y2="346"/><line x1="754" y1="368" x2="756" y2="354"/></g>
+            <circle cx="724" cy="352" r="9" fill="#F06A8A"/><circle cx="740" cy="345" r="10" fill="#FFD45E"/><circle cx="756" cy="354" r="9" fill="#FFFFFF"/>
+            <circle cx="724" cy="352" r="3" fill="#B53E2A"/><circle cx="740" cy="345" r="3.5" fill="#B97852"/><circle cx="756" cy="354" r="3" fill="#FFD45E"/>
+            <rect x="714" y="366" width="48" height="32" rx="4" fill="#C68B4C"/>
+            <g stroke="#A86F37" stroke-width="2"><line x1="716" y1="376" x2="760" y2="376"/><line x1="716" y1="387" x2="760" y2="387"/></g>
+          </svg>
+          <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+          <div class="vf-badge"><i></i><span id="vf-label">READY</span></div>
+          <div class="vf-time lcd"><span class="dig" id="sp-time" data-ghost="8:88">0:20</span></div>
+          <div class="wave" aria-hidden="true">
+            <span style="--d:.7s"></span><span style="--d:1.1s"></span><span style="--d:.8s"></span><span style="--d:1.3s"></span><span style="--d:.6s"></span><span style="--d:1s"></span><span style="--d:.75s"></span><span style="--d:1.2s"></span><span style="--d:.9s"></span><span style="--d:.65s"></span><span style="--d:1.15s"></span><span style="--d:.85s"></span><span style="--d:1.25s"></span><span style="--d:.7s"></span><span style="--d:1.05s"></span><span style="--d:.8s"></span><span style="--d:.95s"></span><span style="--d:.6s"></span><span style="--d:1.2s"></span><span style="--d:.9s"></span><span style="--d:.75s"></span><span style="--d:1.1s"></span>
+          </div>
+        </div>
+        <div class="track" aria-hidden="true"><i id="sp-fill"></i>
+          <span class="mk" style="left:33.33%"><span>0:30</span></span>
+          <span class="mk" style="left:66.67%"><span>1:00 aim</span></span>
+        </div>
+        <div class="track-gap"></div>
+        <div class="row"><button class="btn primary" id="sp-go">Start: 20 s to look</button><span class="mono phase" id="sp-phase">ready</span></div>
+        <p class="result" id="sp-msg" hidden></p>
+      </div>
+
+      <div class="frames">
+        <button class="frame" data-n="1" aria-pressed="false">
+          <span class="n">1</span><span class="t">THE BIG PICTURE</span><span class="tick" aria-hidden="true">✓</span>
+          <span class="g">Общая картина: что это за место?</span>
+          <span class="ph"><span>This photo shows…</span><span>In this picture, I can see…</span></span>
+        </button>
+        <button class="frame" data-n="2" aria-pressed="false">
+          <span class="n">2</span><span class="t">DETAILS</span><span class="tick" aria-hidden="true">✓</span>
+          <span class="g">Детали: кто, что и где</span>
+          <span class="ph"><span>In the foreground, …</span><span>On the left / right, …</span><span>In the background, …</span><span>A woman is holding…</span></span>
+        </button>
+        <button class="frame" data-n="3" aria-pressed="false">
+          <span class="n">3</span><span class="t">THE STORY</span><span class="tick" aria-hidden="true">✓</span>
+          <span class="g">Догадка: что происходит и почему</span>
+          <span class="ph"><span>It looks like…</span><span>Maybe they are… because…</span><span>I think she has just…</span></span>
+        </button>
+        <button class="frame" data-n="4" aria-pressed="false">
+          <span class="n">4</span><span class="t">MY OPINION</span><span class="tick" aria-hidden="true">✓</span>
+          <span class="g">Ваше впечатление</span>
+          <span class="ph"><span>The atmosphere seems…</span><span>This reminds me of…</span><span>Overall, it is a… day.</span></span>
+        </button>
+        <p class="note">Tap a box when you have covered it.</p>
+      </div>
+    </div>
+
+    <details class="model">
+      <summary>Sample answer · about 1 minute</summary>
+      <div class="in">
+        <p><span class="hl hl-1">This photo shows a busy street market on a sunny day.<sup>1</sup></span>
+        <span class="hl hl-2">On the left, there is a fruit stall with a red and white roof. On the table, there are boxes of oranges, apples and green pears. A seller is giving a paper bag to a woman in a purple dress, and she is holding a basket with bread. In the foreground, on the right, I can see a bicycle with flowers in its basket. In the background, there are some old buildings and a big green tree.<sup>2</sup></span>
+        <span class="hl hl-3">It looks like the woman is buying fresh fruit for her family. Maybe she comes here every weekend because the fruit is fresher than in a supermarket.<sup>3</sup></span>
+        <span class="hl hl-4">The atmosphere seems calm and friendly. This photo reminds me of summer holidays. Overall, it is a lovely, peaceful morning.<sup>4</sup></span></p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ============ M3 PHRASE MATCH ============ -->
+<section class="mod" id="m3" data-mod="3">
+  <div class="mod-head"><span class="no">M3</span><span class="mono">Phrase match</span><span class="mono">2 min</span><span class="led" aria-hidden="true"></span></div>
+  <div class="mod-body">
+    <div class="intro">
+      <h2>Connect each phrase to its job</h2>
+      <p class="lead">Click a phrase on the left, then click what it does on the right.</p>
+      <p class="ru">Соедините фразу с её значением.</p>
+    </div>
+    <div class="match" id="match">
+      <svg class="threads" id="threads" aria-hidden="true"></svg>
+      <div class="m-col m-left">
+        <button class="m-item" data-k="fg">In the foreground…</button>
+        <button class="m-item" data-k="bg">In the background…</button>
+        <button class="m-item" data-k="nx">Next to the stall…</button>
+        <button class="m-item" data-k="lk">It looks like…</button>
+        <button class="m-item" data-k="at">The atmosphere seems…</button>
+        <button class="m-item" data-k="rm">This reminds me of…</button>
+      </div>
+      <div aria-hidden="true"></div>
+      <div class="m-col m-right">
+        <button class="m-item" data-k="lk">you make a guess<small>догадка</small></button>
+        <button class="m-item" data-k="fg">the part closest to the camera<small>ближе всего к камере</small></button>
+        <button class="m-item" data-k="rm">a link to your own life<small>связь с вашей жизнью</small></button>
+        <button class="m-item" data-k="nx">very close, at the side of it<small>рядом с</small></button>
+        <button class="m-item" data-k="at">the feeling of the place<small>настроение</small></button>
+        <button class="m-item" data-k="bg">the part far away, behind everything<small>на заднем плане</small></button>
+      </div>
+    </div>
+    <div class="m-status"><div class="pips" id="pips"><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="mono" id="match-msg">0 / 6 connected</span></div>
+  </div>
+</section>
+
+<!-- ============ M4 WRITE ABOUT THE PHOTO ============ -->
+<section class="mod" id="m4" data-mod="4">
+  <div class="mod-head"><span class="no">M4</span><span class="mono">Write about the photo</span><span class="mono">3 min</span><span class="led" aria-hidden="true"></span></div>
+  <div class="mod-body">
+    <div class="intro">
+      <h2>One strong sentence in 60 seconds</h2>
+      <div class="spec"><span>real test: <b>1:00</b> per photo</span><span><b>3</b> photos</span><span>no spellcheck</span></div>
+      <p class="lead">One clear sentence beats three broken ones. Build it with the formula. The timer starts with your first letter.</p>
+      <p class="ru">Одно сильное предложение лучше трёх с ошибками. Проверки орфографии нет, как на настоящем экзамене.</p>
+    </div>
+    <div class="write">
+      <div class="vf">
+        <svg class="scene" viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two students in a café on a rainy day: a girl in a yellow sweater working on a laptop, a boy in a green sweater writing in a notebook, coffee cups and a croissant on the table, rain on the window behind them">
+            <defs><clipPath id="glass"><rect x="482" y="50" width="268" height="248"/></clipPath></defs>
+            <rect width="800" height="520" fill="#F1E3D1"/>
+            <rect y="296" width="800" height="6" fill="#DCC4A9"/>
+            <rect y="302" width="800" height="140" fill="#EAD8C2"/>
+            <rect y="440" width="800" height="80" fill="#B98B66"/>
+            <rect x="468" y="36" width="296" height="276" rx="8" fill="#FFFFFF"/>
+            <rect x="482" y="50" width="268" height="248" fill="#8EAEC4"/>
+            <path d="M482 298V222h40v-30h50v48h36v-70h60v58h40v-18h42v88Z" fill="#6F8CA2"/>
+            <g clip-path="url(#glass)">
+              <g class="rain" stroke="#E3EEF5" stroke-width="2.2" stroke-linecap="round" opacity=".85">
+                <line x1="500" y1="40" x2="494" y2="56"/><line x1="530" y1="80" x2="524" y2="96"/><line x1="556" y1="34" x2="550" y2="50"/><line x1="584" y1="96" x2="578" y2="112"/><line x1="640" y1="44" x2="634" y2="60"/><line x1="668" y1="88" x2="662" y2="104"/><line x1="700" y1="38" x2="694" y2="54"/><line x1="730" y1="92" x2="724" y2="108"/><line x1="512" y1="140" x2="506" y2="156"/><line x1="548" y1="176" x2="542" y2="192"/><line x1="596" y1="150" x2="590" y2="166"/><line x1="652" y1="138" x2="646" y2="154"/><line x1="690" y1="184" x2="684" y2="200"/><line x1="740" y1="150" x2="734" y2="166"/><line x1="626" y1="210" x2="620" y2="226"/><line x1="712" y1="236" x2="706" y2="252"/><line x1="520" y1="248" x2="514" y2="264"/><line x1="570" y1="262" x2="564" y2="278"/><line x1="660" y1="270" x2="654" y2="286"/>
+              </g>
+            </g>
+            <rect x="612" y="50" width="8" height="248" fill="#FFFFFF"/>
+            <rect x="482" y="170" width="268" height="8" fill="#FFFFFF"/>
+            <rect x="456" y="308" width="320" height="12" rx="3" fill="#FFFFFF"/>
+            <!-- shelf -->
+            <g><rect x="68" y="62" width="18" height="56" fill="#E5553B"/><rect x="88" y="70" width="14" height="48" fill="#2F8F83"/><rect x="104" y="58" width="20" height="60" fill="#F2B33D"/><rect x="126" y="74" width="16" height="44" fill="#3F7BB0"/><rect x="150" y="66" width="18" height="52" fill="#7A5BA8" transform="rotate(12 159 118)"/><rect x="176" y="76" width="22" height="42" fill="#E5553B"/></g>
+            <path d="M226 118l-5-30h36l-5 30z" fill="#D9774F"/>
+            <g fill="#5DB36E"><ellipse cx="230" cy="74" rx="7" ry="19" transform="rotate(-28 230 74)"/><ellipse cx="248" cy="72" rx="7" ry="19" transform="rotate(24 248 72)"/><ellipse cx="239" cy="64" rx="7" ry="22"/></g>
+            <rect x="56" y="118" width="230" height="10" rx="2" fill="#8C5E3C"/>
+            <!-- lamp -->
+            <path d="M372 184L428 184L520 344L280 344Z" fill="#FFE6A1" opacity=".16"/>
+            <line x1="400" y1="0" x2="400" y2="152" stroke="#2D2624" stroke-width="3"/>
+            <path d="M370 184L430 184L415 152L385 152Z" fill="#2F8F83"/>
+            <ellipse cx="400" cy="186" rx="11" ry="6" fill="#FFE6A1"/>
+            <!-- girl -->
+            <path d="M216 232Q216 188 250 186Q284 188 284 232L291 300L209 300Z" fill="#2A1E1A"/>
+            <rect x="204" y="262" width="92" height="100" rx="32" fill="#E3A93B"/>
+            <rect x="243" y="244" width="14" height="20" fill="#D7A27C"/>
+            <path d="M236 263Q250 275 264 263" stroke="#C98F2A" stroke-width="4" fill="none"/>
+            <circle cx="250" cy="226" r="27" fill="#D7A27C"/>
+            <path d="M223 224Q226 196 252 196Q276 198 278 220Q262 210 246 216Q232 222 223 224Z" fill="#2A1E1A"/>
+            <path d="M240 232q4 3 8 0M256 232q4 3 8 0" stroke="#2A1E1A" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <!-- boy -->
+            <rect x="514" y="258" width="92" height="104" rx="32" fill="#2F8F83"/>
+            <rect x="553" y="240" width="14" height="20" fill="#A8714E"/>
+            <circle cx="560" cy="222" r="27" fill="#A8714E"/>
+            <path d="M533 218Q534 192 560 192Q588 192 588 216Q582 204 570 206Q556 200 546 210Q538 214 533 218Z" fill="#1F1A17"/>
+            <path d="M550 228q4 3 8 0M566 228q4 3 8 0" stroke="#1F1A17" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <!-- table -->
+            <rect x="70" y="344" width="660" height="18" rx="4" fill="#8C5E3C"/>
+            <rect x="92" y="362" width="616" height="12" fill="#714A2E"/>
+            <rect x="112" y="374" width="12" height="146" fill="#714A2E"/><rect x="676" y="374" width="12" height="146" fill="#714A2E"/>
+            <!-- laptop -->
+            <rect x="196" y="282" width="104" height="62" rx="5" fill="#C9CFD8"/>
+            <circle cx="248" cy="312" r="6" fill="#E8ECF1"/>
+            <rect x="190" y="338" width="116" height="6" rx="2" fill="#AEB6C2"/>
+            <!-- notebook, hands -->
+            <path d="M512 334L600 334L612 346L500 346Z" fill="#FFFFFF"/>
+            <path d="M512 338h90M508 342h98" stroke="#CFD8E3" stroke-width="1.5"/>
+            <path d="M528 292Q520 322 540 336" stroke="#2F8F83" stroke-width="18" stroke-linecap="round" fill="none"/>
+            <circle cx="542" cy="337" r="9" fill="#A8714E"/>
+            <path d="M592 290Q602 316 590 332" stroke="#2F8F83" stroke-width="18" stroke-linecap="round" fill="none"/>
+            <line x1="590" y1="338" x2="604" y2="316" stroke="#263238" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="588" cy="335" r="9" fill="#A8714E"/>
+            <!-- books on table -->
+            <rect x="104" y="334" width="80" height="10" rx="2" fill="#F2B33D"/><rect x="108" y="324" width="72" height="10" rx="2" fill="#3F7BB0"/><rect x="114" y="314" width="62" height="10" rx="2" fill="#E5553B"/>
+            <!-- cups and croissant -->
+            <path class="steam" d="M328 310q-6-10 0-20q6-10 0-20" stroke="#B9A894" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path class="steam s2" d="M341 310q-6-10 0-20q6-10 0-20" stroke="#B9A894" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M318 318h32l-4 26h-24z" fill="#FFFFFF"/><path d="M349 324q12 4 0 14" stroke="#FFFFFF" stroke-width="4" fill="none"/><ellipse cx="334" cy="318" rx="16" ry="3" fill="#6B4226"/>
+            <path class="steam" d="M468 310q-6-10 0-20q6-10 0-20" stroke="#B9A894" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M458 318h32l-4 26h-24z" fill="#FFFFFF"/><path d="M489 324q12 4 0 14" stroke="#FFFFFF" stroke-width="4" fill="none"/><ellipse cx="474" cy="318" rx="16" ry="3" fill="#6B4226"/>
+            <ellipse cx="402" cy="342" rx="36" ry="6" fill="#FFFFFF"/>
+            <path d="M376 340Q402 312 428 340Q414 332 402 334Q390 332 376 340Z" fill="#E3A94F"/>
+            <path d="M392 326l4 8M402 322v10M412 326l-4 8" stroke="#C98B3A" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+        <div class="vf-badge"><i></i><span>PHOTO 1 OF 1</span></div>
+      </div>
+
+      <div class="w-col">
+        <div class="formula" aria-label="Sentence formula">
+          <span class="key">WHO<small>two students</small></span><span class="arr">→</span>
+          <span class="key">IS / ARE + -ING<small>are studying</small></span><span class="arr">→</span>
+          <span class="key">WHERE<small>in a café</small></span><span class="arr">→</span>
+          <span class="key">+ EXTRA<small>while / because / so</small></span>
+        </div>
+        <p class="example"><b>Two students</b> <b>are studying</b> <b>in a cosy café</b>, <b>while it is raining outside.</b></p>
+        <div class="w-top">
+          <div class="lcd lcd-mini"><span class="dig" id="w-time" data-ghost="8:88">1:00</span></div>
+          <div class="w-stats"><span><b id="w-words">0</b> words</span><span><b id="w-wpm">–</b> words/min</span></div>
+        </div>
+        <label for="w-text" class="sr">Your sentence about the photo</label>
+        <textarea id="w-text" rows="5" spellcheck="false" autocomplete="off" autocapitalize="sentences" placeholder="Describe the photo in English. The timer starts with your first letter."></textarea>
+        <div class="row"><button class="btn blue" id="w-go">Start 1:00</button><button class="btn" id="w-reset">Try again</button></div>
+        <ul class="checks" id="w-checks" hidden></ul>
+        <details class="model" id="w-model">
+          <summary>Model answer</summary>
+          <div class="in">
+            <p>Two students are studying together in a cosy café. The girl is working on her laptop, while the boy is writing in his notebook. It is raining outside, so they are drinking hot coffee.</p>
+            <p class="note">In 1 minute, the first two sentences are already a strong answer.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ M5 INTERACTIVE WRITING ============ -->
+<section class="mod" id="m5" data-mod="5">
+  <div class="mod-head"><span class="no">M5</span><span class="mono">Interactive writing</span><span class="mono">5 min</span><span class="led" aria-hidden="true"></span></div>
+  <div class="mod-body">
+    <div class="intro">
+      <h2>The skeleton does half the work</h2>
+      <div class="spec"><span>real test: <b>5:00</b></span><span>then a follow-up <b>3:00</b></span><span>aim <b>50+</b> words</span></div>
+      <p class="lead">You don't need new ideas for the structure, only for the content. Fill in the gaps with your own thoughts.</p>
+      <p class="ru">Это скелет текста. Вы вписываете только свои мысли.</p>
+    </div>
+    <div class="iw">
+      <div class="lcd prompt-card">
+        <span class="lcd-label">prompt</span>
+        <p>Do you prefer to study alone or with friends? Explain why.</p>
+      </div>
+      <p class="tpl" id="tpl">
+        <span class="fx">In my opinion,</span>
+        <select id="iw-choice" aria-label="Your choice"><option>studying with friends</option><option>studying alone</option></select>
+        <span class="fx">is better for me. One reason is that</span>
+        <span class="blank" contenteditable="true" role="textbox" aria-label="Your first reason" data-ph="your first reason"></span><span class="fx">. For example,</span>
+        <span class="blank" contenteditable="true" role="textbox" aria-label="A short example" data-ph="a short example from your life"></span><span class="fx">. Another reason is that</span>
+        <span class="blank" contenteditable="true" role="textbox" aria-label="Your second reason" data-ph="your second reason"></span><span class="fx">. Of course,</span>
+        <span class="blank" contenteditable="true" role="textbox" aria-label="One minus" data-ph="one minus of this way"></span><span class="fx">, but</span>
+        <span class="blank" contenteditable="true" role="textbox" aria-label="Why it is still fine" data-ph="why it is still OK for you"></span><span class="fx">. That is why I prefer</span>
+        <span class="blank" contenteditable="true" role="textbox" aria-label="Your choice again" data-ph="your choice in other words"></span><span class="fx">.</span>
+      </p>
+      <div class="wc">
+        <div class="wc-top"><span><b id="iw-n">0</b> words</span><span class="note" id="iw-msg"></span></div>
+        <div class="wc-bar" id="iw-bar"><i id="iw-fill"></i><b><span>50</span></b></div>
+      </div>
+      <div class="row">
+        <div class="lcd lcd-mini"><span class="dig" id="iw-time" data-ghost="8:88">5:00</span></div>
+        <button class="btn blue" id="iw-go">Start 5:00</button>
+        <button class="btn" id="iw-clear">Clear</button>
+      </div>
+      <div>
+        <p class="mono" style="color:var(--muted);margin-bottom:8px">Upgrade words</p>
+        <div class="swaps">
+          <div class="swap"><s>good</s><span>→</span><b>useful, helpful</b></div>
+          <div class="swap"><s>bad</s><span>→</span><b>harmful, stressful</b></div>
+          <div class="swap"><s>a lot of</s><span>→</span><b>many, plenty of</b></div>
+          <div class="swap"><s>very important</s><span>→</span><b>essential</b></div>
+          <div class="swap"><s>I think</s><span>→</span><b>I believe, in my view</b></div>
+          <div class="swap"><s>because</s><span>→</span><b>since, as</b></div>
+        </div>
+      </div>
+      <p class="follow"><span class="mono" style="color:var(--signal)">Follow-up example · </span>What can you do if your friends talk too much during study time?</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ M6 INTERACTIVE SPEAKING ============ -->
+<section class="mod" id="m6" data-mod="6">
+  <div class="mod-head"><span class="no">M6</span><span class="mono">Interactive speaking</span><span class="mono">3 min</span><span class="led" aria-hidden="true"></span></div>
+  <div class="mod-body">
+    <div class="intro">
+      <h2>35 seconds, no panic</h2>
+      <div class="spec"><span>real test: <b>6–8</b> questions</span><span><b>0:35</b> per answer</span></div>
+      <p class="lead">Start with a time-buyer phrase, give one reason, add one example. That fills 35 seconds.</p>
+      <p class="ru">35 секунд: фраза, чтобы выиграть время, затем причина и пример.</p>
+    </div>
+    <div class="is">
+      <div class="lcd is-card">
+        <div class="lcd-top"><span class="lcd-label">question <span id="is-n">1</span> of 3</span><div class="is-dots" id="is-dots"><i></i><i></i><i></i></div></div>
+        <p class="is-q" id="is-q" aria-live="polite"></p>
+        <div class="is-mid">
+          <div class="ring">
+            <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="bgc" cx="60" cy="60" r="52"/><circle class="fgc" id="ring-fg" cx="60" cy="60" r="52"/></svg>
+            <span class="dig" id="is-time" data-ghost="88">35</span>
+          </div>
+          <div class="row"><button class="btn primary" id="is-go">Start 35 s</button><button class="btn" id="is-next">Next question</button></div>
+        </div>
+      </div>
+      <aside class="buyers">
+        <h3>Time-buyers</h3>
+        <ul>
+          <li>That's an interesting question. Let me think…</li>
+          <li>Well, to be honest, …</li>
+          <li>I've never really thought about it, but I'd say…</li>
+          <li>There are two reasons. First, … Second, …</li>
+          <li>For example, last year I…</li>
+        </ul>
+        <div class="rule"><b>Rule of the day</b><span>Small mistakes are fine. Long silence costs more.</span><span class="ru">Мелкие ошибки не страшны. Долгая пауза хуже.</span></div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINALE ============ -->
+<section class="mod" id="fin">
+  <div class="mod-head"><span class="no">END</span><span class="mono">Session report</span><span class="led" aria-hidden="true"></span></div>
+  <div class="mod-body">
+    <div class="fin-grid">
+      <div class="lcd report">
+        <span class="lcd-label">points today</span>
+        <span class="dig" id="fin-xp" data-ghost="888">000</span>
+        <ul class="rep-list">
+          <li id="rep-1"><span>M1 score</span><b>parts</b></li>
+          <li id="rep-2"><span>M2 speak · photo</span><b>4 boxes</b></li>
+          <li id="rep-3"><span>M3 phrases</span><b>6 links</b></li>
+          <li id="rep-4"><span>M4 write · photo</span><b>1 minute</b></li>
+          <li id="rep-5"><span>M5 writing</span><b>50+ words</b></li>
+          <li id="rep-6"><span>M6 speaking</span><b>3 answers</b></li>
+        </ul>
+      </div>
+      <div style="display:grid;gap:14px;min-width:0">
+        <h2>The plan to test day</h2>
+        <p class="ru">Предлагаемый план до экзамена в конце октября.</p>
+        <ol class="plan">
+          <li><span class="wk">Oct 9–15</span><b>Photo tasks on autopilot</b><span>Speak and write about 10+ new photos with the 4-box frame and the sentence formula.</span></li>
+          <li><span class="wk">Oct 16–22</span><b>Writing templates and speed</b><span>Interactive Writing and the Writing Sample, follow-up answers, typing faster under the timer.</span></li>
+          <li><span class="wk">Oct 23 → test</span><b>Full mock tests</b><span>Whole practice tests on the real timer, plus a calm routine for test day.</span></li>
+        </ol>
+        <div class="row"><button class="btn primary" id="finish">Finish the session</button><span class="fin-msg" id="fin-msg" hidden>Great work, Safiya!</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer><span>created by <b>Stas Vinnikov</b> · репетитор английского</span><span class="mono">DET trial · October 2026</span></footer>
+</main>
+
+<canvas id="confetti" hidden></canvas>
+
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fmt = s => { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+  const pad3 = n => String(n).padStart(3, '0');
+  const countWords = s => (String(s).match(/[A-Za-z0-9À-ɏЀ-ӿ]+(?:['’-][A-Za-z0-9À-ɏЀ-ӿ]+)*/g) || []).length;
+
+  /* ---------- sound ---------- */
+  let ac = null, muted = false;
+  function actx() {
+    if (!ac) { try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { ac = null; } }
+    if (ac && ac.state === 'suspended') ac.resume();
+    return ac;
+  }
+  function tone(f, d = .12, type = 'sine', v = .08, when = 0) {
+    if (muted) return;
+    const a = actx(); if (!a) return;
+    const t = a.currentTime + when, o = a.createOscillator(), g = a.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(v, t + .012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + d + .03);
+  }
+  const sfx = {
+    ok() { tone(660, .12, 'triangle'); tone(990, .2, 'triangle', .07, .09); },
+    bad() { tone(170, .2, 'sawtooth', .045); },
+    tick() { tone(1250, .045, 'square', .025); },
+    pick() { tone(520, .06, 'sine', .05); },
+    rec() { tone(880, .09); tone(880, .09, 'sine', .08, .15); },
+    end() { tone(520, .15, 'triangle'); tone(390, .28, 'triangle', .07, .13); },
+    win() { [523, 659, 784, 1047].forEach((f, i) => tone(f, .24, 'triangle', .07, i * .1)); }
+  };
+  $('#mute').addEventListener('click', e => {
+    muted = !muted;
+    const b = e.currentTarget;
+    b.setAttribute('aria-pressed', String(muted));
+    b.setAttribute('aria-label', muted ? 'Sound off. Click to turn on' : 'Sound on. Click to mute');
+    $('#snd-on').style.display = muted ? 'none' : '';
+    $('#snd-off').style.display = muted ? '' : 'none';
+  });
+
+  /* ---------- points and modules ---------- */
+  let xp = 0;
+  const awarded = new Set(), doneSet = new Set();
+  function award(key, n) {
+    if (awarded.has(key)) return;
+    awarded.add(key); xp += n;
+    const el = $('#xp'); el.textContent = xp; $('#fin-xp').textContent = pad3(Math.min(999, xp));
+    el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump');
+  }
+  function done(n) {
+    if (doneSet.has(n)) return;
+    doneSet.add(n);
+    $('#m' + n).dataset.state = 'done';
+    $(`.chip[data-go="m${n}"]`).classList.add('is-done');
+    $('#rep-' + n).classList.add('is-done');
+    award('mod' + n, 10); sfx.ok();
+  }
+
+  /* ---------- session clock ---------- */
+  const SESS = 20 * 60; let sess = 0, sessOn = false, sessT = null;
+  function renderSess() {
+    const s = Math.min(sess, 99 * 60 + 59);
+    $('#sess').textContent = String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+    $('#sess-line').style.width = Math.min(100, sess / SESS * 100) + '%';
+    $('#sess-ico').setAttribute('d', sessOn ? 'M4 2.5h3v11H4zM9 2.5h3v11H9z' : 'M4 2.5v11l9-5.5z');
+    $('#sess-btn').setAttribute('aria-label', sessOn ? 'Pause session clock' : 'Start session clock');
+  }
+  function startSession() {
+    if (sessOn) return;
+    sessOn = true; sessT = setInterval(() => { sess++; renderSess(); }, 1000); renderSess();
+  }
+  function stopSession() { clearInterval(sessT); sessOn = false; renderSess(); }
+  $('#sess-btn').addEventListener('click', () => { actx(); sessOn ? stopSession() : startSession(); });
+  $('#start').addEventListener('click', () => {
+    actx(); startSession(); sfx.rec();
+    $('#m1').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  });
+  renderSess();
+
+  /* chips */
+  $$('.chip').forEach(c => c.addEventListener('click', () => {
+    $('#' + c.dataset.go).scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  }));
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) {
+        $$('.chip').forEach(c => c.classList.toggle('is-current', c.dataset.go === e.target.id));
+      }
+    }), { rootMargin: '-35% 0px -60% 0px' });
+    $$('.mod').forEach(m => io.observe(m));
+  }
+
+  /* ---------- M1 mixer ---------- */
+  const sl = ['r', 'l', 'w', 's'].map(k => $('#s-' + k));
+  const EX = [75, 60, 50, 55];
+  function mix() {
+    const vals = sl.map(i => +i.value);
+    sl.forEach(i => { i.nextElementSibling.textContent = i.value; });
+    const tot = Math.round(vals.reduce((a, b) => a + b, 0) / 4 / 5) * 5;
+    $('#mix-total').textContent = pad3(tot);
+    $('#mix-fill').style.width = ((tot - 10) / 150 * 100) + '%';
+    const need = 100 - tot;
+    $('#mix-msg').textContent = need > 0 ? `Need +${need} to reach 100` : 'Goal reached: ' + tot;
+    if (tot >= 100) done(1);
+  }
+  sl.forEach(i => i.addEventListener('input', mix));
+  $('#mix-try').addEventListener('click', () => {
+    sl[2].value = Math.min(160, +EX[2] + 40); sl[3].value = Math.min(160, +EX[3] + 40);
+    sl[0].value = EX[0]; sl[1].value = EX[1]; mix(); sfx.pick();
+  });
+  $('#mix-reset').addEventListener('click', () => { sl.forEach((i, k) => { i.value = EX[k]; }); mix(); });
+  $('#mix-ok').addEventListener('click', () => { actx(); done(1); });
+  mix();
+
+  /* ---------- M2 speak about the photo ---------- */
+  const vf = $('#vf'), spBtn = $('#sp-go'), spTime = $('#sp-time'), spPhase = $('#sp-phase'), spFill = $('#sp-fill'), spMsg = $('#sp-msg'), vfLabel = $('#vf-label');
+  const sp = { phase: 'idle', t: 20, timer: null };
+  function spRender() {
+    spTime.textContent = fmt(sp.t);
+    spPhase.classList.toggle('on', sp.phase === 'rec');
+    if (sp.phase === 'idle') { spPhase.textContent = 'ready'; vfLabel.textContent = 'READY'; spBtn.textContent = 'Start: 20 s to look'; spFill.style.width = '0%'; }
+    if (sp.phase === 'prep') { spPhase.textContent = 'look and plan your 4 boxes'; vfLabel.textContent = 'PREPARE'; spBtn.textContent = 'Skip to speaking'; spFill.style.width = '0%'; }
+    if (sp.phase === 'rec') { spPhase.textContent = 'speaking'; vfLabel.textContent = 'REC'; spBtn.textContent = 'Stop'; spFill.style.width = Math.min(100, sp.t / 90 * 100) + '%'; }
+    if (sp.phase === 'done') { spPhase.textContent = 'done'; vfLabel.textContent = 'DONE'; spBtn.textContent = 'Try again'; }
+  }
+  function spStart() {
+    startSession(); clearInterval(sp.timer); spMsg.hidden = true;
+    sp.phase = 'prep'; sp.t = 20; sfx.tick(); spRender();
+    sp.timer = setInterval(() => {
+      sp.t--;
+      if (sp.t <= 3 && sp.t > 0) sfx.tick();
+      if (sp.t <= 0) spRec(); else spRender();
+    }, 1000);
+  }
+  function spRec() {
+    clearInterval(sp.timer); sp.phase = 'rec'; sp.t = 0; sfx.rec();
+    vf.classList.add('is-rec'); spRender();
+    sp.timer = setInterval(() => { sp.t++; if (sp.t >= 90) spStop(); else spRender(); }, 1000);
+  }
+  function spStop() {
+    clearInterval(sp.timer); vf.classList.remove('is-rec');
+    const secs = sp.t; sp.phase = 'done'; sfx.end(); spRender();
+    spMsg.hidden = false;
+    if (secs < 30) spMsg.textContent = `${fmt(secs)} spoken. That's under 30 seconds. Try again and walk through all 4 boxes.`;
+    else if (secs < 60) { spMsg.textContent = `${fmt(secs)} spoken. Good start. Aim for 1 minute or more next time.`; award('sp-rec', 10); }
+    else { spMsg.textContent = `${fmt(secs)} spoken. That's the target length. Well done!`; award('sp-rec', 15); }
+  }
+  spBtn.addEventListener('click', () => {
+    actx();
+    if (sp.phase === 'idle' || sp.phase === 'done') spStart();
+    else if (sp.phase === 'prep') spRec();
+    else if (sp.phase === 'rec') spStop();
+  });
+  spRender();
+  $$('.frame').forEach(b => b.addEventListener('click', () => {
+    actx();
+    const on = b.getAttribute('aria-pressed') !== 'true';
+    b.setAttribute('aria-pressed', String(on));
+    if (on) { sfx.pick(); award('fr' + b.dataset.n, 5); }
+    if ($$('.frame[aria-pressed="true"]').length === 4) done(2);
+  }));
+
+  /* ---------- M3 match with wiggly thread ---------- */
+  const match = $('#match'), svg = $('#threads'), NS = 'http://www.w3.org/2000/svg';
+  let active = null, ptr = null, raf = 0;
+  const locked = [];
+  function anchor(btn, side) {
+    const r = btn.getBoundingClientRect(), m = match.getBoundingClientRect();
+    return { x: (side === 'L' ? r.right : r.left) - m.left, y: r.top + r.height / 2 - m.top };
+  }
+  function wiggle(p1, p2, amp, t) {
+    const n = 30, dx = p2.x - p1.x, dy = p2.y - p1.y, len = Math.hypot(dx, dy) || 1, nx = -dy / len, ny = dx / len;
+    let d = '';
+    for (let i = 0; i <= n; i++) {
+      const u = i / n, env = Math.sin(Math.PI * u), off = amp * env * Math.sin(u * Math.PI * 3 + t * 0.006);
+      d += (i ? 'L' : 'M') + (p1.x + dx * u + nx * off).toFixed(1) + ' ' + (p1.y + dy * u + ny * off).toFixed(1);
+    }
+    return d;
+  }
+  function sag(p1, p2) {
+    const mx = (p1.x + p2.x) / 2, my = (p1.y + p2.y) / 2 + 16;
+    return `M${p1.x.toFixed(1)} ${p1.y.toFixed(1)} Q${mx.toFixed(1)} ${my.toFixed(1)} ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
+  }
+  function loop(ts) {
+    if (!active) return;
+    const p1 = anchor(active.btn, 'L');
+    let p2;
+    if (ptr) { const m = match.getBoundingClientRect(); p2 = { x: ptr.x - m.left, y: ptr.y - m.top }; }
+    else p2 = { x: p1.x + 70, y: p1.y + 8 };
+    active.path.setAttribute('d', wiggle(p1, p2, 9, reduce ? 0 : ts));
+    raf = requestAnimationFrame(loop);
+  }
+  function cancelActive() {
+    if (!active) return;
+    active.btn.classList.remove('is-active'); active.path.remove(); active = null; cancelAnimationFrame(raf);
+  }
+  document.addEventListener('pointermove', e => { if (active) ptr = { x: e.clientX, y: e.clientY }; }, { passive: true });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') cancelActive(); });
+  document.addEventListener('pointerdown', e => { if (active && !e.target.closest('.m-item')) cancelActive(); });
+  $$('.m-left .m-item').forEach(b => b.addEventListener('click', e => {
+    actx();
+    if (b.classList.contains('is-done')) return;
+    cancelActive();
+    const path = document.createElementNS(NS, 'path'); svg.appendChild(path);
+    active = { btn: b, path };
+    ptr = e.clientX || e.clientY ? { x: e.clientX + 40, y: e.clientY } : null;
+    b.classList.add('is-active'); sfx.pick();
+    raf = requestAnimationFrame(loop);
+  }));
+  $$('.m-right .m-item').forEach(b => b.addEventListener('click', () => {
+    if (b.classList.contains('is-done')) return;
+    if (!active) { b.classList.remove('is-wrong'); void b.offsetWidth; b.classList.add('is-wrong'); return; }
+    if (b.dataset.k === active.btn.dataset.k) {
+      cancelAnimationFrame(raf);
+      const a = active.btn, path = active.path; active = null;
+      a.classList.remove('is-active'); a.classList.add('is-done'); b.classList.add('is-done');
+      path.classList.add('locked'); path.setAttribute('d', sag(anchor(a, 'L'), anchor(b, 'R')));
+      locked.push({ a, b, path });
+      sfx.ok(); award('mt-' + a.dataset.k, 5);
+      $$('#pips i').forEach((p, i) => p.classList.toggle('on', i < locked.length));
+      $('#match-msg').textContent = `${locked.length} / 6 connected`;
+      if (locked.length === 6) { $('#match-msg').textContent = 'All 6 connected'; done(3); }
+    } else {
+      sfx.bad(); b.classList.remove('is-wrong'); void b.offsetWidth; b.classList.add('is-wrong');
+    }
+  }));
+  $$('.m-item').forEach(b => b.addEventListener('animationend', () => b.classList.remove('is-wrong')));
+  function relayout() { locked.forEach(l => l.path.setAttribute('d', sag(anchor(l.a, 'L'), anchor(l.b, 'R')))); }
+  addEventListener('resize', relayout);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
+
+  /* ---------- M4 write about the photo ---------- */
+  const wt = $('#w-text'), wGo = $('#w-go');
+  const w = { t: 60, on: false, over: false, timer: null };
+  function wStats() {
+    const n = countWords(wt.value), el = 60 - w.t;
+    $('#w-words').textContent = n;
+    $('#w-wpm').textContent = (w.on || w.over) && el >= 5 ? Math.round(n / (el / 60)) : '–';
+  }
+  function wRender() {
+    $('#w-time').textContent = fmt(w.t);
+    wGo.textContent = w.over ? 'Checked' : w.on ? 'Stop and check' : 'Start 1:00';
+    wGo.disabled = w.over;
+  }
+  function wStart() {
+    if (w.on || w.over) return;
+    startSession(); w.on = true; w.t = 60; sfx.tick();
+    w.timer = setInterval(() => {
+      w.t--;
+      if (w.t <= 5 && w.t > 0) sfx.tick();
+      if (w.t <= 0) wEnd(); else { wRender(); wStats(); }
+    }, 1000);
+    wRender();
+  }
+  const RULES = [
+    ['words', '15 or more words', s => countWords(s) >= 15],
+    ['ing', 'is / are + -ing (for example: are studying)', s => /\b(is|are|am)\s+(\w+\s+)?\w+ing\b/i.test(s)],
+    ['place', 'A place (in, on, at, near, outside…)', s => /\b(in|on|at|near|behind|outside|inside|next to|in front of|under|above)\b/i.test(s)],
+    ['link', 'A linking word (while, and, because, so…)', s => /\b(while|because|so|and|but|who|which|as)\b/i.test(s)],
+    ['caps', 'Capital letter at the start, full stop at the end', s => /^\s*[A-Z]/.test(s) && /[.!?]\s*$/.test(s)]
+  ];
+  function wEnd() {
+    clearInterval(w.timer); w.on = false; w.over = true; wt.readOnly = true; sfx.end();
+    wRender(); wStats();
+    const s = wt.value, ul = $('#w-checks'); ul.innerHTML = '';
+    RULES.forEach(([k, label, test]) => {
+      const pass = test(s), li = document.createElement('li');
+      li.className = pass ? 'pass' : 'fail';
+      li.innerHTML = `<i>${pass ? '✓' : '×'}</i><span></span>`;
+      li.querySelector('span').textContent = label;
+      ul.appendChild(li);
+      if (pass) award('w-' + k, 5);
+    });
+    ul.hidden = false; $('#w-model').open = true;
+    done(4);
+  }
+  wt.addEventListener('input', () => { if (!w.on && !w.over && wt.value.trim()) wStart(); wStats(); });
+  wGo.addEventListener('click', () => { actx(); if (w.on) wEnd(); else if (!w.over) { wStart(); wt.focus(); } });
+  $('#w-reset').addEventListener('click', () => {
+    clearInterval(w.timer); w.t = 60; w.on = false; w.over = false;
+    wt.readOnly = false; wt.value = ''; $('#w-checks').hidden = true; $('#w-model').open = false;
+    wRender(); wStats(); wt.focus();
+  });
+  wRender();
+
+  /* ---------- M5 interactive writing ---------- */
+  const blanks = $$('#tpl .blank'), choice = $('#iw-choice');
+  const iw = { t: 300, on: false, timer: null };
+  function iwCount() {
+    let n = 0;
+    $$('#tpl .fx').forEach(s => { n += countWords(s.textContent); });
+    n += countWords(choice.value);
+    const typed = blanks.reduce((a, b) => a + countWords(b.textContent), 0);
+    n += typed;
+    $('#iw-n').textContent = n;
+    $('#iw-fill').style.width = Math.min(100, n / 80 * 100) + '%';
+    $('#iw-bar').classList.toggle('ok', n >= 50);
+    $('#iw-msg').textContent = typed === 0 ? `The skeleton already gives you ${n} words.` : n >= 50 ? 'Over 50 words. Now check grammar and upgrade one word.' : `${50 - n} more to reach 50.`;
+    if (n >= 50) done(5);
+  }
+  blanks.forEach((b, i) => {
+    b.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); if (blanks[i + 1]) blanks[i + 1].focus(); }
+    });
+    b.addEventListener('paste', e => {
+      e.preventDefault();
+      const t = (e.clipboardData || window.clipboardData).getData('text').replace(/\s+/g, ' ');
+      document.execCommand('insertText', false, t);
+    });
+    b.addEventListener('input', () => {
+      if (!b.textContent.trim()) b.innerHTML = '';
+      if (!iw.on && iw.t === 300) iwToggle();
+      iwCount();
+    });
+  });
+  choice.addEventListener('change', iwCount);
+  function iwRender() {
+    $('#iw-time').textContent = fmt(iw.t);
+    $('#iw-go').textContent = iw.t <= 0 ? 'Time is up' : iw.on ? 'Pause' : iw.t === 300 ? 'Start 5:00' : 'Continue';
+    $('#iw-go').disabled = iw.t <= 0;
+  }
+  function iwToggle() {
+    if (iw.t <= 0) return;
+    if (iw.on) { clearInterval(iw.timer); iw.on = false; iwRender(); return; }
+    startSession(); iw.on = true;
+    iw.timer = setInterval(() => {
+      iw.t--;
+      if (iw.t <= 5 && iw.t > 0) sfx.tick();
+      if (iw.t <= 0) { clearInterval(iw.timer); iw.on = false; sfx.end(); }
+      iwRender();
+    }, 1000);
+    iwRender();
+  }
+  $('#iw-go').addEventListener('click', () => { actx(); iwToggle(); });
+  $('#iw-clear').addEventListener('click', () => {
+    blanks.forEach(b => { b.innerHTML = ''; });
+    clearInterval(iw.timer); iw.on = false; iw.t = 300; iwRender(); iwCount();
+  });
+  iwRender(); iwCount();
+
+  /* ---------- M6 interactive speaking ---------- */
+  const QS = [
+    'You speak Kyrgyz, Russian and English. Which language is the hardest for you, and why?',
+    'What do you want to study at university, and why?',
+    'Tell me about a place in your city where you like to spend time.'
+  ];
+  const C = 2 * Math.PI * 52, ring = $('#ring-fg');
+  ring.style.strokeDasharray = C.toFixed(2);
+  const is = { i: 0, t: 35, on: false, timer: null, answered: new Set() };
+  function isRender() {
+    $('#is-q').textContent = QS[is.i];
+    $('#is-n').textContent = is.i + 1;
+    $('#is-time').textContent = String(is.t).padStart(2, '0');
+    ring.style.strokeDashoffset = (C * (1 - is.t / 35)).toFixed(2);
+    $('#is-go').textContent = is.on ? 'Stop' : is.t < 35 ? 'Again' : 'Start 35 s';
+    $$('#is-dots i').forEach((d, k) => { d.classList.toggle('on', is.answered.has(k)); d.classList.toggle('cur', k === is.i); });
+  }
+  function isCredit() {
+    is.answered.add(is.i); award('is-' + is.i, 10);
+    if (is.answered.size === QS.length) done(6);
+  }
+  function isStop(full) {
+    clearInterval(is.timer); is.on = false;
+    if (full || 35 - is.t >= 15) isCredit();
+    isRender();
+  }
+  $('#is-go').addEventListener('click', () => {
+    actx();
+    if (is.on) { isStop(false); return; }
+    startSession(); is.t = 35; is.on = true; sfx.rec(); isRender();
+    is.timer = setInterval(() => {
+      is.t--;
+      if (is.t <= 5 && is.t > 0) sfx.tick();
+      if (is.t <= 0) { is.t = 0; sfx.end(); isStop(true); } else isRender();
+    }, 1000);
+  });
+  $('#is-next').addEventListener('click', () => {
+    if (is.on) isStop(false);
+    is.i = (is.i + 1) % QS.length; is.t = 35; isRender(); sfx.pick();
+  });
+  isRender();
+
+  /* ---------- finale ---------- */
+  function confetti() {
+    const c = $('#confetti'), x = c.getContext('2d'); if (!x) return;
+    const dpr = window.devicePixelRatio || 1, W = innerWidth, H = innerHeight;
+    c.width = W * dpr; c.height = H * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const cs = getComputedStyle(document.documentElement);
+    const cols = ['--signal', '--key', '--ok', '--display-ink', '--warn'].map(v => cs.getPropertyValue(v).trim() || '#FFB547');
+    const P = Array.from({ length: reduce ? 0 : 180 }, () => ({
+      x: W / 2 + (Math.random() - .5) * 220, y: H * .38, vx: (Math.random() - .5) * 15, vy: -Math.random() * 15 - 4,
+      r: Math.random() * 6 + 4, c: cols[Math.floor(Math.random() * cols.length)], a: Math.random() * 6, va: (Math.random() - .5) * .3, sq: Math.random() < .55
+    }));
+    if (!P.length) return;
+    c.hidden = false; let f = 0;
+    (function step() {
+      x.clearRect(0, 0, W, H);
+      P.forEach(p => {
+        p.vy += .34; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.a += p.va;
+        x.save(); x.translate(p.x, p.y); x.rotate(p.a); x.fillStyle = p.c;
+        if (p.sq) x.fillRect(-p.r / 2, -p.r / 3, p.r, p.r * .66); else { x.beginPath(); x.arc(0, 0, p.r / 2, 0, Math.PI * 2); x.fill(); }
+        x.restore();
+      });
+      if (++f < 210) requestAnimationFrame(step); else { x.clearRect(0, 0, W, H); c.hidden = true; }
+    })();
+  }
+  $('#finish').addEventListener('click', () => {
+    actx(); stopSession(); award('finish', 10); sfx.win(); confetti();
+    const m = $('#fin-msg'); m.hidden = false;
+    m.textContent = doneSet.size === 6 ? 'Great work, Safiya! All 6 modules done.' : `Great work, Safiya! ${doneSet.size} of 6 modules done.`;
+  });
+})();
+</script>
+
+</body></html>
